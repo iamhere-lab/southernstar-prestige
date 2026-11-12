@@ -30,8 +30,8 @@ window.SS_CONFIG = {
   whatsappNumber: "",
   whatsappMessage: "Hi, I'm interested in Prestige Southern Star, Bannerghatta Road. Please share the price list and floor plans.",
 
-  /* Auto-open the enquiry popup after this many seconds (once per session). 0 disables. */
-  popupDelaySeconds: 10,
+  /* Auto-open the enquiry popup after this many seconds, or at 50% scroll if that comes first (once per session, never after a form is started). 0 disables. */
+  popupDelaySeconds: 30,
 
   /* Optional public brochure URL, shown after a successful "Download Brochure" enquiry. */
   brochureUrl: "",
