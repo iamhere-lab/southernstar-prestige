@@ -49,21 +49,30 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What homes are available at Prestige Southern Star?", "acceptedAnswer": {"@type": "Answer", "text": "3 and 4 BHK residences from 1,800 to 2,774 sq ft: 3 BHK + 3T (1,800 to 1,820 sq ft), 3 BHK + 3T + home office (2,083 to 2,118 sq ft) and 4 BHK + 4T + home office (2,690 to 2,774 sq ft)."}}, {"@type": "Question", "name": "What is the starting price?", "acceptedAnswer": {"@type": "Answer", "text": "3 BHK + 3T homes start at ₹2.36 Cr*, 3 BHK + 3T + home office at ₹2.75 Cr* and 4 BHK at ₹3.55 Cr*. Prices are indicative and exclude taxes and statutory charges. Ask for the tower-wise price sheet for the exact cost of a unit."}}, {"@type": "Question", "name": "Where is Prestige Southern Star located?", "acceptedAnswer": {"@type": "Answer", "text": "In Akshayanagar, off Bannerghatta Road, South Bengaluru. Singasandra Metro Station is 3 km away, Hulimavu Metro Station 4 km, Electronic City 5 km, JP Nagar 5.4 km and Koramangala 6.6 km, as per the project brochure."}}, {"@type": "Question", "name": "Is the project RERA registered?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The RERA registration number is PRM/KA/RERA/1251/310/PR/210325/007603."}}, {"@type": "Question", "name": "What amenities does the township have?", "acceptedAnswer": {"@type": "Answer", "text": "A landscaped central park, three swimming pools including an Olympic-length pool, an expansive clubhouse with a mini theatre and gaming arcade, and a one-acre fitness district with courts for tennis, badminton, squash, basketball and more."}}, {"@type": "Question", "name": "Who is the developer?", "acceptedAnswer": {"@type": "Answer", "text": "Prestige Estates Projects Limited (Prestige Group), founded in Bengaluru in 1986."}}, {"@type": "Question", "name": "How do I get the floor plans or book a site visit?", "acceptedAnswer": {"@type": "Answer", "text": "Submit the form on this page. The sales team will call you back, share the floor plans and price sheet, and fix a site visit slot that suits you."}}]}
 </script>
 <style>
-/* Popup on phones: a compact card, not a full screen, and easy to close */
-.modal-dismiss { display: none; }
+/* Popup on phones: same structure as desktop (image panel + form), squeezed vertically, easy to close */
 @media (max-width: 720px) {
-  .modal { width: min(380px, calc(100% - 36px)); max-height: calc(100svh - 80px); border-radius: 16px; }
-  .modal-offer { display: none; }
-  .modal-inner { padding: 20px 18px 12px; }
-  .modal-tag { font-size: 10.5px; letter-spacing: .1em; padding-right: 48px; margin-bottom: 4px; }
-  .modal-inner .form-title { font-size: 21px; padding-right: 48px; margin-bottom: 12px; }
-  .modal .form-lede, .modal .assure { display: none; }
-  .modal .field:has(input[name="email"]) { display: none; }
-  .modal .lead-form { gap: 10px; }
-  .modal .btn-submit { min-height: 48px; }
-  .modal-close { top: 8px; right: 8px; width: 44px; height: 44px; background: #f1eee5; color: #123a2b; border: 1px solid #e0dacb; }
-  .modal-dismiss { display: block; width: 100%; margin-top: 4px; padding: 12px 0 6px; border: 0; background: none; font: inherit; font-size: 13.5px; color: var(--grey-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .modal { width: min(400px, calc(100% - 28px)); max-height: calc(100svh - 28px); border-radius: 16px; }
+  .modal-offer { min-height: 0; }
+  .modal-offer-inner { display: grid; grid-template-columns: 104px 1fr; column-gap: 14px; align-content: center; align-items: center; padding: 12px 56px 12px 16px; }
+  .modal-lockup { margin: 0; grid-row: 1 / span 2; }
+  .modal-offer .modal-eyebrow { grid-column: 2; align-self: end; }
+  .modal-offer h3 { grid-column: 2; align-self: start; }
+  .ss-logo-modal { width: 104px; margin: 0; }
+  .modal-offer .modal-eyebrow { font-size: 9.5px; letter-spacing: .12em; margin: 0 0 3px; }
+  .modal-offer h3 { font-size: 15px; line-height: 1.25; margin: 0; }
+  .modal-perks, .modal-trust { display: none; }
+  .modal-inner { padding: 14px 16px 16px; }
+  .modal-tag { font-size: 10.5px; letter-spacing: .1em; margin-bottom: 2px; }
+  .modal-inner .form-title { font-size: 20px; margin-bottom: 4px; }
+  .modal .form-lede { font-size: 13px; line-height: 1.4; margin-bottom: 10px; }
+  .modal .assure { display: none; }
+  .modal .lead-form { gap: 8px; }
+  .modal .lead-form input, .modal .lead-form select { min-height: 44px; height: 44px; padding-top: 8px; padding-bottom: 8px; font-size: 15px; }
+  .modal .btn-submit { min-height: 46px; }
+  .modal-close { top: 8px; right: 8px; width: 40px; height: 40px; background: rgba(255,255,255,.92); color: #123a2b; border: 0; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
 }
+/* Email field shown on every form */
+.hero-form .field:has(input[name="email"]), .ss-visit-form .field:has(input[name="email"]) { display: block; }
 /* Header call button */
 .hdr-call { gap: 8px; text-decoration: none; letter-spacing: .06em; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .hdr-call svg { flex: none; }
@@ -147,7 +156,6 @@
       <p class="hero-eoi"><span class="hero-eoi-dot" aria-hidden="true"></span>RERA Registered · 30+ Acre Township</p>
     </div>
     <div class="hero-form">
-      <p class="hf-tag">Takes 30 seconds</p>
       <p class="form-title">Get Price Sheet &amp; Floor Plans</p>
       <p class="form-lede">Share your details and a sales expert will call you back with tower-wise pricing, floor plans and a site visit slot.</p>
       <div class="js-form-slot" data-form-id="hero" data-submit-label="Get Price Sheet &amp; Floor Plans"></div>
@@ -381,12 +389,11 @@
       </div>
     </aside>
     <div class="modal-inner">
-      <p class="modal-tag">Takes 30 seconds · 3, 4 BHK from ₹2.36 Cr*</p>
+      <p class="modal-tag">3, 4 BHK from ₹2.36 Cr*</p>
       <h2 id="modal-title" class="form-title js-modal-title">Unlock price &amp; floor plans</h2>
       <p class="form-lede js-modal-lede">Tell us where to send them. A Prestige Southern Star sales expert will call you back with the details.</p>
       <div class="js-form-slot" data-form-id="modal"></div>
       <p class="assure"><svg aria-hidden="true" width="13" height="13"><use href="#i-lock"/></svg> 100% privacy. No spam, ever. Your details go only to the Prestige Southern Star sales team.</p>
-      <button class="modal-dismiss" type="button" data-close>Not now</button>
     </div>
   </div>
 </dialog>
