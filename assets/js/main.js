@@ -133,8 +133,6 @@
     var email = (form.elements.email ? form.elements.email.value.trim() : "");
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { setError(form, "email", "Please enter a valid email address."); ok = false; first = first || form.elements.email; }
     else setError(form, "email", "");
-    if (!form.elements.consent.checked) { setError(form, "consent", "Please tick the box so the sales team can contact you."); ok = false; first = first || form.elements.consent; }
-    else setError(form, "consent", "");
     return { ok: ok, first: first, name: name, cc: cc, digits: digits, email: email };
   }
 
