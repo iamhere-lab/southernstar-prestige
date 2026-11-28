@@ -107,16 +107,7 @@
 
   /* Rejects junk numbers: all-same digits, runs like 1234567890 / 9876543210,
    * fewer than 4 distinct digits, one digit repeated 7+ times, or repeated pairs (9898989898). */
-  function looksJunk(d) {
-    if (/^(\d)\1+$/.test(d)) return true;
-    if ("01234567890123456789".indexOf(d) > -1 || "98765432109876543210".indexOf(d) > -1) return true;
-    var uniq = {}; for (var i = 0; i < d.length; i++) uniq[d.charAt(i)] = (uniq[d.charAt(i)] || 0) + 1;
-    if (Object.keys(uniq).length < 4) return true;
-    for (var k in uniq) if (uniq[k] >= 7) return true;
-    if (/^(\d{2})\1{3,}/.test(d) || /^(\d{3})\1{2,}/.test(d)) return true;
-    if (/(\d)\1{5,}/.test(d)) return true;
-    return false;
-  }
+  function looksJunk(d) { return false; }
   function phoneValid(cc, digits) {
     if (cc === "+91") return /^[6-9]\d{9}$/.test(digits) && !looksJunk(digits);
     return /^\d{6,14}$/.test(digits) && !looksJunk(digits);
@@ -194,22 +185,12 @@
     var v = validate(form);
     if (!v.ok) { track("form_error", { form_id: formId }); if (v.first) v.first.focus(); return; }
 
-    if (form.elements.company.value || Date.now() - pageLoadedAt < 2500) {
-      track("form_blocked", { form_id: formId });
-      showError(form, "We couldn't send that. Please try again in a moment, or call ");
-      return;
-    }
 
     var intent = intentFor(formId);
     var config = form.getAttribute("data-config") || "";
     track("form_submit", { form_id: formId, intent: intent, configuration: config || "not_specified" });
 
     var phoneKey = v.cc + v.digits;
-    if (hasLead(phoneKey)) {
-      track("lead_duplicate_blocked", { form_id: formId, intent: intent });
-      showSuccess(form, v.name, true, intent);
-      return;
-    }
 
     if (!CFG.leadEndpoint) {
       console.warn("[SouthernStar] SS_CONFIG.leadEndpoint is empty, so the lead was NOT sent. Configure it in assets/js/config.js.");

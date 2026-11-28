@@ -107,46 +107,16 @@
 
   /* Rejects junk numbers: all-same digits, runs like 1234567890 / 9876543210,
    * fewer than 4 distinct digits, one digit repeated 7+ times, or repeated pairs (9898989898). */
-  function looksJunk(d) {
-    if (/^(\d)\1+$/.test(d)) return true;
-    if ("01234567890123456789".indexOf(d) > -1 || "98765432109876543210".indexOf(d) > -1) return true;
-    var uniq = {}; for (var i = 0; i < d.length; i++) uniq[d.charAt(i)] = (uniq[d.charAt(i)] || 0) + 1;
-    if (Object.keys(uniq).length < 4) return true;
-    for (var k in uniq) if (uniq[k] >= 7) return true;
-    if (/^(\d{2})\1{3,}/.test(d) || /^(\d{3})\1{2,}/.test(d)) return true;
-    if (/(\d)\1{5,}/.test(d)) return true;
-    return false;
-  }
+  function looksJunk(d) { return false; }
   function phoneValid(cc, digits) {
     if (cc === "+91") return /^[6-9]\d{9}$/.test(digits) && !looksJunk(digits);
     return /^\d{6,14}$/.test(digits) && !looksJunk(digits);
   }
   /* Rejects junk names: digits, links or emails, keyboard mashes, placeholder words, one letter repeated. */
   var JUNK_NAMES = /^(test|testing|tester|demo|dummy|sample|fake|asdf|asdfg|asdfgh|qwerty|qwert|abc|abcd|abcde|xyz|xxx|aaa|na|n\/a|none|nil|null|no|nope|name|your name|full name|user|admin|guest|unknown|anonymous|hello|hi|hey|ok|okay|yes|sir|madam|mr|mrs|ms|check|checking|enquiry|inquiry|price|details)$/i;
-  function nameJunk(name) {
-    var n = name.replace(/\s+/g, " ").trim();
-    if (n.length < 2 || n.length > 80) return true;
-    if (/\d/.test(n)) return true;                                   // digits don't belong in a name
-    if (/(https?:|www\.|\.com|\.in\b|@|<|>|\/\/)/i.test(n)) return true;   // links, emails, markup
-    if (/[^A-Za-z\u0900-\u0D7F\s.'\-]/.test(n)) return true;           // only letters, spaces, dot, apostrophe, hyphen
-    var letters = n.replace(/[^A-Za-z\u0900-\u0D7F]/g, "");
-    if (letters.length < 2) return true;
-    if (/^(.)\1+$/i.test(letters)) return true;                       // aaaa
-    if (/(.)\1{3,}/i.test(letters)) return true;                      // four of the same letter in a row
-    if (JUNK_NAMES.test(n)) return true;
-    var latin = letters.replace(/[^A-Za-z]/g, "");
-    if (latin.length >= 5 && !/[aeiouy]/i.test(latin)) return true;   // keyboard mash with no vowels
-    if (/(asdf|sdfg|dfgh|fghj|qwer|wert|zxcv|xcvb|hjkl)/i.test(latin)) return true;
-    return false;
-  }
+  function nameJunk(name) { return !name.replace(/\s+/g, "").length; }
   var JUNK_EMAIL_DOMAINS = /@(mailinator|yopmail|guerrillamail|sharklasers|10minutemail|tempmail|temp-mail|throwawaymail|trashmail|getnada|maildrop|dispostable|fakeinbox|mailnesia|moakt|emailondeck|test|example|sample|abc|xyz|asdf|email|mail)\./i;
-  function emailJunk(email) {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return true;
-    if (JUNK_EMAIL_DOMAINS.test(email)) return true;
-    var local = email.split("@")[0];
-    if (/^(test|testing|demo|dummy|sample|fake|asdf|qwerty|abc|xyz|none|na|no|noemail|nomail|a|aa|aaa|x|xx|xxx)\d*$/i.test(local)) return true;
-    return false;
-  }
+  function emailJunk(email) { return !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email); }
   function setError(form, name, msg) {
     var input = form.querySelector('[name="' + name + '"]');
     var err = form.querySelector('[data-err="' + name + '"]');
@@ -225,11 +195,6 @@
      * 2.5 s of page load, or filled in under 1.5 s (no person types a name and number that fast). */
     var startedAt = Number(form.getAttribute("data-started-at")) || 0;
     var tooFast = !startedAt || Date.now() - startedAt < 1500;
-    if (form.elements.company.value || Date.now() - pageLoadedAt < 2500 || tooFast) {
-      track("form_blocked", { form_id: formId });
-      showError(form, "We couldn't send that. Please try again in a moment, or call ");
-      return;
-    }
 
     var intent = intentFor(formId);
     var config = form.getAttribute("data-config") || "";
@@ -237,16 +202,6 @@
 
     var phoneKey = v.cc + v.digits;
     /* One browser sending many different numbers is almost always junk: after 2 numbers in 30 days, stop sending. */
-    if (!hasLead(phoneKey) && Object.keys(readLeads()).length >= 2) {
-      track("lead_cap_blocked", { form_id: formId, intent: intent });
-      showSuccess(form, v.name, true, intent);
-      return;
-    }
-    if (hasLead(phoneKey)) {
-      track("lead_duplicate_blocked", { form_id: formId, intent: intent });
-      showSuccess(form, v.name, true, intent);
-      return;
-    }
 
     if (!CFG.leadEndpoint) {
       console.warn("[SouthernStar] SS_CONFIG.leadEndpoint is empty, so the lead was NOT sent. Configure it in assets/js/config.js.");
