@@ -35,6 +35,11 @@
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',id);
   })(window.SS_CONFIG && window.SS_CONFIG.gtmId);
 </script>
+<!-- Microsoft Clarity -->
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","zkn6a3vs7z");
+/* Mirror form/lead/contact events from the dataLayer into Clarity so recordings can be filtered by them. */
+(function(){var dl=window.dataLayer=window.dataLayer||[],E=/^(form_|lead_|popup_|cta_click|brochure_download|phone_click|whatsapp_click|email_click|click_call|click_whatsapp)/;function wrap(){if(dl.push&&dl.push.__clarity)return;var p=dl.push;var f=function(){for(var k=0;k<arguments.length;k++){var o=arguments[k];if(o&&typeof o.event==="string"&&E.test(o.event)){try{window.clarity("event",o.event)}catch(e){}}}return p.apply(dl,arguments)};f.__clarity=1;dl.push=f}wrap();window.addEventListener("load",wrap);var n=0,t=setInterval(function(){wrap();if(++n>10)clearInterval(t)},1000)})();</script>
+<!-- End Microsoft Clarity -->
 </head>
 <body>
 <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
